@@ -117,6 +117,7 @@ def removeCar():
         # If POST, try to remove car
         elif request.method == "POST":
             car_id = request.form.get("car-select")
+            db.execute("DELETE FROM fuel_info WHERE car_id = ?", car_id)
             db.execute("DELETE FROM cars WHERE id = ?", car_id)
             return redirect("/")
         
