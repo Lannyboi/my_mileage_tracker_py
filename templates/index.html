@@ -5,5 +5,14 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Welcome {{ username.username }}</h1>
+    <h1>My Cars</h1>
+    <br>
+    <div class="cars">
+        {% for car in cars %}
+            <div class="car-card">
+                <img src="../static/car-icon.png" alt="A car Icon">
+                <p class="car-info">{{ car.car_year }} {{ car.make }} {{ car.model }}</p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

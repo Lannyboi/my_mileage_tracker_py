@@ -1,3 +1,4 @@
+/* All form layouts */
 .form {
     display: flex;
     flex-direction: column;
@@ -7,4 +8,34 @@
 
 .form > div > input {
     padding: 5px 10px;
+}
+
+/* Car cards layout */
+h1 {
+    font-size: 42px;
+}
+
+.cars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    align-items: center;
+}
+
+.car-card {
+    border-radius: 10px;
+    justify-content: space-between;
+    width: 250px;
+    box-shadow: 0px 0px 5px black;
+}
+
+img {
+    width: 250px;
+    padding: 20px;
+}
+
+.car-info {
+    font-size: 20px;
+    font-weight: bold;
 }

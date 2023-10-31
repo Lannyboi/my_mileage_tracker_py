@@ -18,7 +18,7 @@ db = SQL("sqlite:///mileageTracker.db")
 @app.route("/")
 @login_required
 def home():
-    return render_template("index.html", username=db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])[0])
+    return render_template("index.html", cars=db.execute("SELECT cars.* FROM cars JOIN users on cars.user_id = users.id WHERE users.id = ?", session["user_id"]))
 
 
 @app.route("/register", methods=["GET", "POST"])

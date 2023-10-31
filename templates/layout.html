@@ -20,9 +20,26 @@
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session["user_id"] %}
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="/car">Add Car</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/fuel">Add Fuel Entry</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/stats">Car Stats</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Cars
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/car-add">Add Car</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/car-remove">Remove Car</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Fuel info
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/add-car">Add Record</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/remove-car">View Statistics</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
