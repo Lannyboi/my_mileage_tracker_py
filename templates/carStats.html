@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stats
+{% endblock %}
+
+{% block main %}
+    <h1>{{ car.car_year }} {{ car.make }} {{ car.model }}</h1>
+    <br>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Date</th>
+                <th class="text-end">Odometer</th>
+                <th class="text-end">Price Per Gallon</th>
+                <th class="text-end">Total Gallons</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in allEntries %}
+                <tr>
+                    <td class="text-start">{{ entry.year }}/{{ entry.month }}/{{ entry.day }}</td>
+                    <td class="text-end">{{ entry.total_miles }}</td>
+                    <td class="text-end">{{ entry.price_per_gallon | usd }}</td>
+                    <td class="text-end">{{ entry.total_gallons }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

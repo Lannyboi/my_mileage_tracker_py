@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stats
+{% endblock %}
+
+{% block main %}
+    <h1>Stats</h1>
+    <br>
+    <form action="/view-stats" method="post">
+        <div class="mb-3">
+            <select class="form-select mx-auto w-auto" name="car-select">
+                <option disabled selected>Select Car to View</option>
+                {% for car in cars %}
+                    <option value="{{ car.id }}">{{ car.car_year }} {{ car.make }} {{ car.model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">View Stats</button>
+    </form>
+{% endblock %}

@@ -2,10 +2,12 @@ from cs50 import SQL
 from flask import Flask, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
-from helpers import login_required
+from helpers import login_required, usd
 
 app = Flask(__name__)
+app.jinja_env.filters["usd"] = usd
 
 app.config['SECRET_KEY'] = 'the friends we made along the way'
 app.config["SESSION_PERMANENT"] = False
@@ -14,7 +16,7 @@ Session(app)
 
 db = SQL("sqlite:///mileageTracker.db")
 
-
+""" app routes """
 @app.route("/")
 @login_required
 def home():
@@ -86,9 +88,11 @@ def logout():
 @app.route("/add-car", methods=["GET", "POST"])
 @login_required
 def addCar():
+    # If GET, render addCar page
     if request.method == "GET":
         return render_template("addCar.html")
     
+    # If POST, try to add car
     elif request.method == "POST":
         year = int(request.form.get("year"))
         make = request.form.get("make")
@@ -105,11 +109,57 @@ def addCar():
 @app.route("/remove-car", methods=["GET", "POST"])
 @login_required
 def removeCar():
+        # If GET, render remove car page
         if request.method == "GET":
             cars = db.execute("SELECT * FROM cars WHERE user_id = ?", session["user_id"])
             return render_template("removeCar.html", cars=cars)
         
+        # If POST, try to remove car
         elif request.method == "POST":
             car_id = request.form.get("car-select")
             db.execute("DELETE FROM cars WHERE id = ?", car_id)
             return redirect("/")
+        
+
+@app.route("/add-record", methods=["GET", "POST"])
+@login_required
+def addRecord():
+    cars = db.execute("SELECT * FROM cars WHERE user_id = ?", session["user_id"])
+    # If GET, render addRecord page
+    if request.method == "GET":
+        return render_template("addRecord.html", cars=cars)
+    
+    elif request.method == "POST":
+        # Form values
+        car_id = request.form.get("car-select")
+        date = request.form.get("date")
+        odometer = request.form.get("odometer")
+        pricePerGallon = request.form.get("price_per_gallon")
+        totalGallons = request.form.get("total_gallons")
+        
+        # Check that all fields were filled
+        if not car_id or not date or not odometer or not pricePerGallon or not totalGallons:
+            return "Please provide all information"
+        else:
+            # Parse the date into year, month, and day
+            date_obj = datetime.strptime(date, "%Y-%m-%d")
+            year = date_obj.year
+            month = date_obj.month
+            day = date_obj.day
+
+            # Add record to db and redirect to stats page
+            db.execute("INSERT INTO fuel_info (year, month, day, total_miles, price_per_gallon, total_gallons, car_id) VALUES (?, ?, ?, ?, ?, ?, ?)", year, month, day, odometer, pricePerGallon, totalGallons, car_id)
+            return redirect("/")
+        
+
+@app.route("/view-stats", methods=["GET", "POST"])
+@login_required
+def viewStats():
+    if request.method == "GET":
+        cars = db.execute("SELECT * FROM cars WHERE user_id = ?", session["user_id"])
+        return render_template("viewStats.html", cars=cars)
+    
+    elif request.method == "POST":
+        car_id = request.form.get("car-select")
+        allEntries = db.execute("SELECT fuel_info.* FROM fuel_info JOIN cars on fuel_info.car_id = cars.id WHERE cars.user_id = ? AND cars.id = ?", session["user_id"], car_id)
+        return render_template("carStats.html", allEntries=allEntries, car=db.execute("SELECT * FROM cars WHERE id = ?", car_id)[0])
