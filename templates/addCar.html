@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Car
+{% endblock %}
+
+{% block main %}
+    <h1>Add Car</h1>
+    <br>
+    <form action="/add-car" method="post" class="form">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="year" name="year" placeholder="Year" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="make" name="make" placeholder="Make" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="model" name="model" placeholder="Model" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Add Car</button>
+    </form>
+{% endblock %}

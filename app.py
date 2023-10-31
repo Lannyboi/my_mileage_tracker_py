@@ -75,8 +75,28 @@ def login():
     else:
         return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
     # Logout
     session.clear()
     return redirect("/")
+
+
+@app.route("/add-car", methods=["GET", "POST"])
+@login_required
+def addCar():
+    if request.method == "GET":
+        return render_template("addCar.html")
+    
+    elif request.method == "POST":
+        year = int(request.form.get("year"))
+        make = request.form.get("make")
+        model = request.form.get("model")
+
+        if not year or not make or not model:
+            return "Please fill out all required fields"
+        else:
+            print(year, make, model, session["user_id"])
+            db.execute("INSERT INTO cars (car_year, make, model, user_id) VALUES (?, ?, ?, ?)", year, make, model, session["user_id"])
+            return redirect("/")
