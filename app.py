@@ -100,3 +100,16 @@ def addCar():
             print(year, make, model, session["user_id"])
             db.execute("INSERT INTO cars (car_year, make, model, user_id) VALUES (?, ?, ?, ?)", year, make, model, session["user_id"])
             return redirect("/")
+        
+
+@app.route("/remove-car", methods=["GET", "POST"])
+@login_required
+def removeCar():
+        if request.method == "GET":
+            cars = db.execute("SELECT * FROM cars WHERE user_id = ?", session["user_id"])
+            return render_template("removeCar.html", cars=cars)
+        
+        elif request.method == "POST":
+            car_id = request.form.get("car-select")
+            db.execute("DELETE FROM cars WHERE id = ?", car_id)
+            return redirect("/")

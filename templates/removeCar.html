@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Remove Car
+{% endblock %}
+
+{% block main %}
+    <h1>Remove Car</h1>
+    <br>
+    <form action="/remove-car" method="post">
+        <div class="mb-3">
+            <select class="form-select mx-auto w-auto" name="car-select">
+                <option disabled selected>Select Car to Remove</option>
+                {% for car in cars %}
+                    <option value="{{ car.id }}">{{ car.car_year }} {{ car.make }} {{ car.model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">Remove Car</button>
+    </form>
+{% endblock %}
