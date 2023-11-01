@@ -164,3 +164,4 @@ def viewStats():
         car_id = request.form.get("car-select")
         allEntries = db.execute("SELECT fuel_info.* FROM fuel_info JOIN cars on fuel_info.car_id = cars.id WHERE cars.user_id = ? AND cars.id = ?", session["user_id"], car_id)
         return render_template("carStats.html", allEntries=allEntries, car=db.execute("SELECT * FROM cars WHERE id = ?", car_id)[0])
+    
