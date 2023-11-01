@@ -13,7 +13,7 @@ app.jinja_env.filters["usd"] = usd
 app.config['SECRET_KEY'] = 'the friends we made along the way'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://lvyoumqzneedyl:21cd8831f240f60715dfaf722f3508b97bbcd7d3205836cbe371ceec2fbde3c3@ec2-3-230-24-12.compute-1.amazonaws.com:5432/dbvf8fu77agh8h"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://lvyoumqzneedyl:21cd8831f240f60715dfaf722f3508b97bbcd7d3205836cbe371ceec2fbde3c3@ec2-3-230-24-12.compute-1.amazonaws.com:5432/dbvf8fu77agh8h"
 Session(app)
 
 db = SQLAlchemy(app)
