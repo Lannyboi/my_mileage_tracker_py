@@ -1,6 +1,6 @@
-from cs50 import SQL
 from flask import Flask, redirect, render_template, request, session, jsonify
 from flask_session import Session
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
@@ -12,9 +12,37 @@ app.jinja_env.filters["usd"] = usd
 app.config['SECRET_KEY'] = 'the friends we made along the way'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://lvyoumqzneedyl:21cd8831f240f60715dfaf722f3508b97bbcd7d3205836cbe371ceec2fbde3c3@ec2-3-230-24-12.compute-1.amazonaws.com:5432/dbvf8fu77agh8h"
 Session(app)
 
-db = SQL("sqlite:///mileageTracker.db")
+db = SQLAlchemy(app)
+
+# Classes
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False)
+    hash = db.Column(db.String, nullable=False)
+
+class Car(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    car_year = db.Column(db.Integer, nullable=False)
+    make = db.Column(db.String, nullable=False)
+    model = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref='cars')
+
+class FuelInfo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    year = db.Column(db.Integer, nullable=False)
+    month = db.Column(db.Integer, nullable=False)
+    day = db.Column(db.Integer, nullable=False)
+    total_miles = db.Column(db.Float, nullable=False)
+    price_per_gallon = db.Column(db.Float, nullable=False)
+    total_gallons = db.Column(db.Float, nullable=False)
+    car_id = db.Column(db.Integer, db.ForeignKey('car.id'))
+    car = db.relationship('Car', backref='fuel_info')
+
 
 """ app routes """
 @app.route("/")
