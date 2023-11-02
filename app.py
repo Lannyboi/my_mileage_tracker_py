@@ -14,7 +14,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-db = SQL("sqlite:///mileageTracker.db")
+db = SQL("postgresql://ufpjtgamgehktm:64c44eb792c62c915f9b81fbfb18ba0a029b02354517798d5f904ff793c3bde3@ec2-3-230-24-12.compute-1.amazonaws.com:5432/ddlhsuhple332m")
 
 """ app routes """
 @app.route("/")
