@@ -65,7 +65,7 @@ def login():
         
         # Check credentials
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
-
+        
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             return "Invalid username and/or password"
         
