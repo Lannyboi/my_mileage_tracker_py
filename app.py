@@ -97,12 +97,12 @@ def addCar():
         year = int(request.form.get("year"))
         make = request.form.get("make")
         model = request.form.get("model")
+        odometer = request.form.get("odometer")
 
-        if not year or not make or not model:
+        if not year or not make or not model or not odometer:
             return "Please fill out all required fields"
         else:
-            print(year, make, model, session["user_id"])
-            db.execute("INSERT INTO cars (car_year, make, model, user_id) VALUES (?, ?, ?, ?)", year, make, model, session["user_id"])
+            db.execute("INSERT INTO cars (car_year, make, model, odometer, user_id) VALUES (?, ?, ?, ?, ?)", year, make, model, odometer, session["user_id"])
             return redirect("/")
         
 
@@ -163,5 +163,17 @@ def viewStats():
     elif request.method == "POST":
         car_id = request.form.get("car-select")
         allEntries = db.execute("SELECT fuel_info.* FROM fuel_info JOIN cars on fuel_info.car_id = cars.id WHERE cars.user_id = ? AND cars.id = ?", session["user_id"], car_id)
-        return render_template("carStats.html", allEntries=allEntries, car=db.execute("SELECT * FROM cars WHERE id = ?", car_id)[0])
-    
+        averageMPG = calculateMPG(allEntries, car_id)
+        for entry in allEntries:
+            print(entry["price_per_gallon"], entry["total_gallons"])
+        return render_template("carStats.html", allEntries=allEntries, car=db.execute("SELECT * FROM cars WHERE id = ?", car_id)[0], averageMPG=averageMPG)
+
+
+def calculateMPG(allEntries, car_id):
+    startingMiles = db.execute("SELECT odometer FROM cars WHERE id = ?", car_id)[0]["odometer"]
+    latestOdometer = db.execute("SELECT total_miles FROM fuel_info WHERE car_id = ? ORDER BY year DESC, month DESC, day DESC LIMIT 1", car_id)[0]["total_miles"]
+    milesDriven = latestOdometer - startingMiles
+    totalGallons = 0
+    for entry in allEntries:
+        totalGallons += entry["total_gallons"]
+    return round((milesDriven / totalGallons), 2)

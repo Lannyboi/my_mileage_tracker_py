@@ -6,6 +6,8 @@
 
 {% block main %}
     <h1>{{ car.car_year }} {{ car.make }} {{ car.model }}</h1>
+    <h4>Average MPG: {{ averageMPG }}</h4>
+    <p>(The average MPG is only reliable when the most recent fuel record filled the vehicle's gas tank completely, not just adding a specific amount of money. Ex $20)</p>
     <br>
     <table class="table table-striped">
         <thead>
@@ -14,6 +16,7 @@
                 <th class="text-end">Odometer</th>
                 <th class="text-end">Price Per Gallon</th>
                 <th class="text-end">Total Gallons</th>
+                <th class="text-end">Total Price</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +26,7 @@
                     <td class="text-end">{{ entry.total_miles }}</td>
                     <td class="text-end">{{ entry.price_per_gallon | usd }}</td>
                     <td class="text-end">{{ entry.total_gallons }}</td>
+                    <td class="text-end">{{ (entry.price_per_gallon * entry.total_gallons) | usd }}</td>
                 </tr>
             {% endfor %}
         </tbody>
